@@ -4,3 +4,6 @@
 [submodule "tools/gate"]
 	path = tools/gate
 	url = https://github.com/cpp-pm/gate
+[submodule "third-party/PicoSHA2"]
+	path = third-party/PicoSHA2
+	url = https://github.com/okdshin/PicoSHA2
