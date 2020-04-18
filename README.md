@@ -66,21 +66,18 @@ int main(int, char*[])
 
 Пример настройки логгирования в файл:
 ```cpp
-logging::add_file_log("log.log"); // тривиальный вывод в файл
+boost::shared_ptr< logging::core > core = logging::core::get();
 
-logging::add_file_log // расширенная настройка
-(
-    keywords::file_name = "log_%N.log",
-    keywords::rotation_size = 10 * 1024 * 1024, 
-    keywords::time_based_rotation = sinks::file::rotation_at_time_point{0, 0, 0},
-    keywords::format = "[%TimeStamp%]: %Message%"
-);
-```
+boost::shared_ptr< sinks::text_file_backend > backend =
+    boost::make_shared< sinks::text_file_backend >(
+        keywords::file_name = "file_%5N.log",
+        keywords::rotation_size = 5 * 1024 * 1024,
+        keywords::format = "[%TimeStamp%]: %Message%",
+        keywords::time_based_rotation =
+            sinks::file::rotation_at_time_point(12, 0, 0));
 
-Пример установки фильтрации логгирования:
-```cpp
-logging::core::get()->set_filter
-(
-    logging::trivial::severity >= logging::trivial::info
-);
+typedef sinks::synchronous_sink< sinks::text_file_backend > sink_t;
+boost::shared_ptr< sink_t > sink(new sink_t(backend));
+// sink ->set_filter(logging::trivial::severity >= logging::trivial::info);
+core->add_sink(sink);
 ```
