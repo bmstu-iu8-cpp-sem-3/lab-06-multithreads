@@ -25,6 +25,15 @@ SHA256("1234") = "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846
 1. Для логгирования использовать библиотеку `boost::log` (документацию с примерами можно найти [здесь](https://www.boost.org/doc/libs/1_63_0/libs/log/doc/html/log/tutorial.html#log.tutorial.trivial)).
 1. Обеспечить ротацию лог-файлов по размеру.
 1. Для формирования случайных входных данных использовать псевдослучайный генератор `std::rand`.
+1. Корректно обработать завершение программы с помощью нажатия на клавиши **Ctrl+C**.
+1. При завершении работы программы создать файл с данными в виде json-массива. Имя файла задается аргументом командной строки. При отсутствии аргумента, завершить программу. <br/>Json-массив хранит объекты следующего вида:
+```js
+{
+  "timestamp": 1566777600, // время нахождение подходящего хеша
+  "hash": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX0000", // hex-представление полученного хеша
+  "data": "AABCDA32F" // hex-представление прообраза хеш-функции
+}
+```
 
 
 ## Рекомендации
@@ -80,4 +89,28 @@ typedef sinks::synchronous_sink< sinks::text_file_backend > sink_t;
 boost::shared_ptr< sink_t > sink(new sink_t(backend));
 // sink ->set_filter(logging::trivial::severity >= logging::trivial::info);
 core->add_sink(sink);
+```
+
+Для работы с Json используйте знакомые вам библиотеки. Стоит сделать один json-массив, доступ к которому предоставить из всех запущенных потоков. Чтобы избежать гонки за данными, синхронизируйте доступ до этого объекта.
+
+Итоговый json должен выглядеть следующим образом (`X`- произвольный **HEX**-символ):
+```js
+[
+    {
+        "timestamp": 1566777600,
+        "hash": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX0000",
+        "data": "XXXXXXXXXXXXXXX"
+    },
+    {
+        "timestamp": 1566777640,
+        "hash": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX0000",
+        "data": "XXXXXXXXX"
+    },
+    {
+        "timestamp": 1566776621,
+        "hash": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX0000",
+        "data": "XXXXXXXXX"
+    },
+    // ...
+]
 ```
