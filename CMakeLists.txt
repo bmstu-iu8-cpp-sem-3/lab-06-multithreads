@@ -18,35 +18,30 @@ HunterGate(
         SHA1 "2d6686024529b471e0cc3a4fc07d4d64b62a53ee"
 )
 
-
-# TODO: rename project and delete this comment
-project(template)
+project(hash_finder_lib)
+project(hash_finder_app)
 string(APPEND CMAKE_CXX_FLAGS " -pedantic -Werror -Wall -Wextra")
 string(APPEND CMAKE_CXX_FLAGS " -Wno-unused-command-line-argument")
 string(APPEND CMAKE_CXX_FLAGS " -Wshadow -Wnon-virtual-dtor")
 
+hunter_add_package(Boost COMPONENTS log)
+find_package(Boost CONFIG REQUIRED log)
 hunter_add_package(GTest)
 find_package(GTest CONFIG REQUIRED)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third-party/PicoSHA2/)
 
-# TODO: change template word to project name and delete this comment
-add_library(template STATIC
-        # enum your files and delete this comment
-        ${CMAKE_CURRENT_SOURCE_DIR}/sources/source.cpp
-        )
-add_executable(tests
-        # TODO: enum your files and delete this comment
-        ${CMAKE_CURRENT_SOURCE_DIR}/tests/test.cpp
-        )
+FILE(GLOB HASH_FINDER_LIB_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/sources/lib/*.cpp")
+add_library(hash_finder_lib STATIC ${HASH_FINDER_LIB_SOURCES})
+FILE(GLOB TEST_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp")
+add_executable(tests ${TEST_SOURCES})
+FILE(GLOB HASH_FINDER_APP_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/sources/app/*.cpp")
+add_executable(hash_finder_app ${HASH_FINDER_APP_SOURCES})
 
-# TODO: change template word to project name and delete this comment
-target_include_directories(template
-        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
-        )
-target_include_directories(tests
-        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
-        )
-# TODO: change template word to project name and delete this comment
-target_link_libraries(tests PRIVATE GTest::gmock_main template)
+target_include_directories(hash_finder_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(tests PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(hash_finder_app PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+target_link_libraries(tests PRIVATE GTest::gmock_main hash_finder_lib)
 
 enable_testing()
 add_test(NAME unit_tests COMMAND tests)
@@ -64,8 +59,7 @@ if (BUILD_COVERAGE)
     set(ENABLE_COVERAGE ON CACHE BOOL "Enable coverage build." FORCE)
     list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/tools/CMake-codecov/cmake")
     find_package(codecov)
-    # TODO: change template word to project name and delete this comment
-    enable_project_coverage(template)
+    enable_project_coverage(hash_finder_lib)
     enable_project_coverage(tests)
     list(APPEND LCOV_REMOVE_PATTERNS "'${PROJECT_SOURCE_DIR}/tests/*'")
     coverage_evaluate()
