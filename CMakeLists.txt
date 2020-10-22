@@ -24,8 +24,8 @@ string(APPEND CMAKE_CXX_FLAGS " -pedantic -Werror -Wall -Wextra")
 string(APPEND CMAKE_CXX_FLAGS " -Wno-unused-command-line-argument")
 string(APPEND CMAKE_CXX_FLAGS " -Wshadow -Wnon-virtual-dtor")
 
-hunter_add_package(Boost COMPONENTS log)
-find_package(Boost CONFIG REQUIRED log)
+hunter_add_package(Boost COMPONENTS thread log filesystem)
+find_package(Boost CONFIG REQUIRED thread log filesystem)
 hunter_add_package(GTest)
 find_package(GTest CONFIG REQUIRED)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third-party/PicoSHA2/)
@@ -42,6 +42,7 @@ target_include_directories(tests PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_include_directories(hash_finder_app PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 target_link_libraries(tests PRIVATE GTest::gmock_main hash_finder_lib)
+target_link_libraries(hash_finder_app PRIVATE hash_finder_lib Boost::log Boost::thread Boost::filesystem)
 
 enable_testing()
 add_test(NAME unit_tests COMMAND tests)
