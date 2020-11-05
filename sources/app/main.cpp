@@ -40,18 +40,18 @@ int main(int const arguments_count, char const* arguments[]) {
     assert(m > 0);
 
     setup_logging(::logging::core::get());
+
+    ::std::cout << "testme" << ::std::endl;
+    BOOST_LOG_TRIVIAL(info) << "Hello world";
 }
 
 void setup_logging(::boost::shared_ptr<::logging::core> const& logging_core) {
     namespace keywords = ::logging::keywords;
     namespace sinks = ::logging::sinks;
 
-    auto backend = boost::make_shared<sinks::text_file_backend>(
-        keywords::file_name = "logs/file_%5N.log", keywords::rotation_size = 5ul << 20u,
-        keywords::format = "[%TimeStamp%]: %Message%",
-        keywords::time_based_rotation = sinks::file::rotation_at_time_point(12, 0, 0));
-
-    typedef sinks::asynchronous_sink<sinks::text_file_backend> sink_t;
-    boost::shared_ptr<sink_t> sink = boost::make_shared<sink_t>(backend);
-    logging_core->add_sink(sink);
+    logging_core->add_sink(boost::make_shared<sinks::asynchronous_sink<sinks::text_file_backend>>(
+        boost::make_shared<sinks::text_file_backend>(
+            keywords::file_name = "logs/file_%5N.log", keywords::rotation_size = 5ul << 20u,
+            keywords::format = "[%TimeStamp%]: %Message%",
+            keywords::time_based_rotation = sinks::file::rotation_at_time_point(12, 0, 0))));
 }
