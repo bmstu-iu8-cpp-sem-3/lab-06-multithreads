@@ -20,12 +20,9 @@
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/log/utility/setup/console.hpp>
 #include <boost/log/utility/setup/file.hpp>
-#include <chrono>
 #include <cstddef>
-#include <cstdio>
 #include <fstream>
 #include <hash_finder_lib.hpp>
-#include <iostream>
 #include <string>
 #include <thread>
 #include <vector>
@@ -36,14 +33,13 @@ namespace hash_finder_app {
 
 int main(int const arguments_count, char const* arguments[]) {
     hash_finder_lib::string_utils::ends_with("foo", "o");
-    namespace chrono = ::std::chrono;
 
     { // this is requires as the program uses static context to handle signals
         static ::std::atomic_bool single_caller_guard = false;
         bool expectation = false;
         if (!single_caller_guard.compare_exchange_strong(expectation, true))
             throw ::std::runtime_error("Attempt to call main() multiple times");
-    } // namespace =::std::chrono;
+    }
 
     ::hash_finder_app::setup_logging();
 
@@ -77,8 +73,6 @@ int main(int const arguments_count, char const* arguments[]) {
     static ::std::atomic_bool shutdown = false;
     {
         __sighandler_t interruptionHandler = [](int const signal) {
-            ::std::cout << "Signal = " << signal << ::std::endl;
-            static_cast<void>(signal); // suppress unused lambda parameter warning
             BOOST_LOG_TRIVIAL(info) << "Shutting down due to signal <" << signal << '>' << std::endl;
             shutdown = true;
         };
@@ -121,7 +115,6 @@ int main(int const arguments_count, char const* arguments[]) {
         for (auto& worker : workers) worker.join();
     }
 
-    ::std::cout << "ReportFileName  = " << *reportFileName << ::std::endl;
     if (reportFileName) {
         BOOST_LOG_TRIVIAL(info) << "Generating report file \"" << *reportFileName << "\"" << ::std::endl;
         ::std::ofstream output(*reportFileName);
