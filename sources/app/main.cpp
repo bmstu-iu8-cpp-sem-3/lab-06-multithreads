@@ -149,6 +149,8 @@ namespace hash_finder_app {
         namespace keywords = logging::keywords;
         namespace sinks = logging::sinks;
 
+        logging::add_common_attributes();
+
         logging::core::get()->set_filter(logging::trivial::severity >= logging::trivial::info);
 
         auto const format = expressions::stream << '['
