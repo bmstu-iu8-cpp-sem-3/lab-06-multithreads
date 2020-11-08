@@ -11,4 +11,4 @@ namespace hash_finder_lib::string_utils {
 
         return ::std::equal(source.begin() + sourceSize - suffixSize, source.end(), suffix.begin());
     }
-} // namespace hash_finder_lib
+} // namespace hash_finder_lib::string_utils

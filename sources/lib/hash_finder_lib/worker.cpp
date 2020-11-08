@@ -14,12 +14,13 @@ namespace hash_finder_lib::worker {
 
     ::std::thread create_async_worker(::std::uintmax_t const seed, Callback const& callback) {
         return ::std::thread([seed, &callback]() {
-          ::std::default_random_engine random(seed);
-          ::std::uniform_int_distribution<::std::uint8_t> distribution;
+            ::std::default_random_engine random(seed);
+            ::std::uniform_int_distribution<::std::uint8_t> distribution;
 
-          Result result;
-          do result = next_result(random, distribution);
-          while (callback(result));
+            Result result;
+            do {
+                result = next_result(random, distribution);
+            } while (callback(result));
         });
     }
 
@@ -46,4 +47,4 @@ namespace hash_finder_lib::worker {
 
         return data;
     }
-}
+} // namespace hash_finder_lib::worker

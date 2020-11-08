@@ -1,5 +1,7 @@
-#ifndef INCLUDE_WORKER_HPP_
-#define INCLUDE_WORKER_HPP_
+// Copyright 2020 Petr Portnov <gh@progrm-jarvis.ru>
+
+#ifndef INCLUDE_HASH_FINDER_LIB_WORKER_HPP_
+#define INCLUDE_HASH_FINDER_LIB_WORKER_HPP_
 
 #include <chrono>
 #include <cstddef>
@@ -19,4 +21,4 @@ namespace hash_finder_lib::worker {
     ::std::thread create_async_worker(::std::uintmax_t seed, Callback const&);
 } // namespace hash_finder_lib::worker
 
-#endif // INCLUDE_WORKER_HPP_
+#endif // INCLUDE_HASH_FINDER_LIB_WORKER_HPP_

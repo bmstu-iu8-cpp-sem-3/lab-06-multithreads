@@ -1,7 +1,7 @@
 // Copyright 2020 Petr Portnov <gh@progrm-jarvis.ru>
 
-#ifndef INCLUDE_SEED_GENERATOR_HPP_
-#define INCLUDE_SEED_GENERATOR_HPP_
+#ifndef INCLUDE_HASH_FINDER_LIB_SEED_GENERATOR_HPP_
+#define INCLUDE_HASH_FINDER_LIB_SEED_GENERATOR_HPP_
 
 #include <cstddef>
 // include target-specific intrinsics required for good random seeding
@@ -19,6 +19,6 @@ namespace hash_finder_lib::seed_generator {
     inline
 #endif
     ::std::uintmax_t good_seed() { return __rdtsc(); }
-} // namespace hash_finder_lib
+} // namespace hash_finder_lib::seed_generator
 
-#endif // INCLUDE_SEED_GENERATOR_HPP_
+#endif // INCLUDE_HASH_FINDER_LIB_SEED_GENERATOR_HPP_

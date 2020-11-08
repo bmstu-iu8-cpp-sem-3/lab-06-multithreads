@@ -31,16 +31,6 @@
 #include <vector>
 
 namespace hash_finder_app {
-
-    struct Needle {
-        ::std::chrono::seconds::rep timestamp;
-        ::std::string hash, data;
-
-        // required to support vector<Needle>::emplace_back(...) on [C++ < 2a]
-        Needle(long const timestamp_, ::std::string const& hash_, ::std::string const& data_)
-            : timestamp(timestamp_), hash(hash_), data(::std::move(data_)) {}
-    };
-
     static void setup_logging();
 } // namespace hash_finder_app
 

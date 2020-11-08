@@ -7,9 +7,9 @@
 namespace hash_finder_lib::report_generator {
 
     static void write_needle_(::std::ostream& output, ::hash_finder_lib::worker::Result const& result) {
-        output << "  {\n    \"timestamp\": " << result.timestamp.count()
-               << ",\n    \"hash\": \"" << ::picosha2::bytes_to_hex_string(result.hash)
-               << "\",\n    \"data\": \"" << ::picosha2::bytes_to_hex_string(result.data) << "\"\n  }";
+        output << "  {\n    \"timestamp\": " << result.timestamp.count() << ",\n    \"hash\": \""
+               << ::picosha2::bytes_to_hex_string(result.hash) << "\",\n    \"data\": \""
+               << ::picosha2::bytes_to_hex_string(result.data) << "\"\n  }";
     }
 
     void generate_report(::std::ostream& output, std::vector<::hash_finder_lib::worker::Result> const& results) {
@@ -23,7 +23,6 @@ namespace hash_finder_lib::report_generator {
                 while (++iterator != end) write_needle_(output << ",\n", *iterator);
             }
         }
-        if (!results.empty()) {}
 
         output << "\n]";
     }
