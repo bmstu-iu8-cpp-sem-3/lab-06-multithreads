@@ -107,14 +107,15 @@ int main(int const arguments_count, char const* arguments[]) {
             = [shutdownPointer, &results, &resultsMutex](::hash_finder_lib::worker::Result const& result) {
                   auto const data = ::picosha2::bytes_to_hex_string(result.data),
                              hash = ::picosha2::bytes_to_hex_string(result.hash);
-                  BOOST_LOG_TRIVIAL(trace) << "sha256(" << data << ") = " << hash << ::std::endl;
 
                   if (::hash_finder_lib::string_utils::ends_with(hash, "0000")) {
-                      BOOST_LOG_TRIVIAL(info) << "<MATCH> sha256(" << data << ") = " << hash << ::std::endl;
+                      BOOST_LOG_TRIVIAL(info) << "sha256(" << data << ") = " << hash << ::std::endl;
 
                       // handle the value matching the task
                       ::std::lock_guard const lock(resultsMutex);
                       results.push_back(result);
+                  } else {
+                      BOOST_LOG_TRIVIAL(trace) << "sha256(" << data << ") = " << hash << ::std::endl;
                   }
 
                   return !*shutdownPointer;
