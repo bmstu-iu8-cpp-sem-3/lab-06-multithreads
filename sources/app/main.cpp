@@ -37,7 +37,7 @@ namespace hash_finder_app {
         ::std::string hash, data;
 
         // required to support vector<Needle>::emplace_back(...) on [C++ < 2a]
-        Needle(long const timestamp_, std::string const& hash_, std::string const& data_)
+        Needle(long const timestamp_, ::std::string const& hash_, ::std::string const& data_)
             : timestamp(timestamp_), hash(hash_), data(::std::move(data_)) {}
     };
 
@@ -64,14 +64,14 @@ int main(int const arguments_count, char const* arguments[]) {
             m = ::std::stoul(arguments[1]);
         } catch (::std::invalid_argument const& e) {
             BOOST_LOG_TRIVIAL(error) << "Invalid m: expected positive number but got \"" << arguments[1] << "\""
-                                     << std::endl;
+                                     << ::std::endl;
             return 1;
         } catch (::std::out_of_range const& e) {
-            BOOST_LOG_TRIVIAL(error) << "Invalid m: value " << arguments[1] << " is too big" << std::endl;
+            BOOST_LOG_TRIVIAL(error) << "Invalid m: value " << arguments[1] << " is too big" << ::std::endl;
             return 1;
         }
         if (m == 0) {
-            ::std::cerr << "Invalid m: expected positive number but got 0" << std::endl;
+            ::std::cerr << "Invalid m: expected positive number but got 0" << ::std::endl;
             return 1;
         }
 
@@ -152,10 +152,11 @@ namespace hash_finder_app {
 
         logging::core::get()->set_filter(logging::trivial::severity >= logging::trivial::info);
 
-        auto const format = expressions::stream
-                            << '['
-                            << expressions::format_date_time<boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S")
-                            << ']' << " (" << logging::trivial::severity << "): " << expressions::smessage;
+        auto const format = expressions::stream << '['
+                                                << expressions::format_date_time<::boost::posix_time::ptime>(
+                                                       "TimeStamp", "%Y-%m-%d %H:%M:%S")
+                                                << ']' << " (" << logging::trivial::severity
+                                                << "): " << expressions::smessage;
 
         logging::add_console_log()->set_formatter(format);
         logging::add_file_log(keywords::file_name = "logs/file_%5N.log", keywords::rotation_size = 5ul << 20u,
