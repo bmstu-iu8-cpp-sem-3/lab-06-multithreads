@@ -14,8 +14,8 @@ set(
 include("tools/gate/cmake/HunterGate.cmake")
 
 HunterGate(
-  URL "https://github.com/cpp-pm/hunter/archive/v0.23.278.tar.gz"
-  SHA1 "35fa55bc1dfcf9f4d7264f8bb26cd1759ce1ae07"
+        URL "https://github.com/cpp-pm/hunter/archive/v0.23.278.tar.gz"
+        SHA1 "35fa55bc1dfcf9f4d7264f8bb26cd1759ce1ae07"
 )
 
 project(hash_finder_lib)
@@ -24,8 +24,8 @@ string(APPEND CMAKE_CXX_FLAGS " -pedantic -Werror -Wall -Wextra")
 string(APPEND CMAKE_CXX_FLAGS " -Wno-unused-command-line-argument")
 string(APPEND CMAKE_CXX_FLAGS " -Wshadow -Wnon-virtual-dtor")
 
-hunter_add_package(Boost COMPONENTS thread log filesystem)
-find_package(Boost CONFIG REQUIRED thread log filesystem)
+hunter_add_package(Boost COMPONENTS log filesystem thread)
+find_package(Boost CONFIG REQUIRED log filesystem thread)
 hunter_add_package(GTest)
 find_package(GTest CONFIG REQUIRED)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third-party/PicoSHA2/)
@@ -42,7 +42,7 @@ target_include_directories(tests PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_include_directories(hash_finder_app PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 target_link_libraries(tests PRIVATE GTest::gmock_main hash_finder_lib)
-target_link_libraries(hash_finder_app PRIVATE hash_finder_lib Boost::log Boost::thread Boost::filesystem)
+target_link_libraries(hash_finder_app PRIVATE hash_finder_lib Boost::log Boost::filesystem Boost::thread)
 
 enable_testing()
 add_test(NAME unit_tests COMMAND tests)
