@@ -110,7 +110,6 @@ int main(int const arguments_count, char const* arguments[]) {
                   BOOST_LOG_TRIVIAL(trace) << "sha256(" << data << ") = " << hash << ::std::endl;
 
                   if (::hash_finder_lib::string_utils::ends_with(hash, "0000")) {
-                      ::std::cout << "len = " << result.data.size() << ::std::endl;
                       BOOST_LOG_TRIVIAL(info) << "<MATCH> sha256(" << data << ") = " << hash << ::std::endl;
 
                       // handle the value matching the task
