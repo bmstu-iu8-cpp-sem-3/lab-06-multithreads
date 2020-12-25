@@ -69,6 +69,3 @@ std::size_t BrutFSha::time() {
     }
   }
 }
-
-
-
