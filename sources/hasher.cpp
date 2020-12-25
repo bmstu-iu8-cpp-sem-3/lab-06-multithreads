@@ -1,10 +1,8 @@
 // Copyright 2020 Your Name <your_email>
 
-#include <header.hpp>
 #include <boost/log/trivial.hpp>
 #include <chrono>
-
-
+#include <hasher.hpp>
 
 struct Data {
   std::string str;

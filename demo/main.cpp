@@ -1,13 +1,12 @@
-#include <header.hpp>
-#include <csignal>
-#include <iostream>
-#include <thread>
-#include <fstream>
-
+// Copyright 2020 Your Name <your_email>
 #include <boost/log/sinks.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/utility/setup.hpp>
-
+#include <csignal>
+#include <fstream>
+#include <hasher.hpp>
+#include <iostream>
+#include <thread>
 
 void init(){
   auto traceFile = boost::log::add_file_log(
@@ -31,7 +30,6 @@ void init(){
   //exit
   signal(SIGINT, BrutFSha::sign_exit);
 }
-
 
 int main(int argc, char* argv[]) {
     init();

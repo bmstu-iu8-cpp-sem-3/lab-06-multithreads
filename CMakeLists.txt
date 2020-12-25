@@ -41,7 +41,7 @@ find_package(Threads)
 add_subdirectory("third-party/")
 
 add_library(sha256 STATIC
-  ${CMAKE_CURRENT_SOURCE_DIR}/sources/source.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/sources/hasher.cpp
 )
 
 add_executable(demo
