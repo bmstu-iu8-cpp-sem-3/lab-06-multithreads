@@ -82,7 +82,7 @@ if(BUILD_COVERAGE)
   function(ENABLE_PROJECT_COVERAGE PROJECT)
     target_compile_options(${PROJECT} PRIVATE --coverage)
     target_link_libraries(${PROJECT} PRIVATE --coverage)
-    add_coverage(${PROJECT})
+    enable_project_coverage(${PROJECT})
   endfunction()
 
   set(ENABLE_COVERAGE ON CACHE BOOL "Enable coverage build." FORCE)
