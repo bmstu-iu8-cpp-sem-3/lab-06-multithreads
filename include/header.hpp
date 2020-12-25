@@ -8,35 +8,31 @@
 #include <string>
 #include <random>
 #include <picosha2.h>
+#include <mutex>
+#include <nlohmann/json.hpp>
 
+bool is_correct_ssh(const std::string& s);
+
+using json = nlohmann::json;
 
 class BrutFSha {
  private:
   unsigned int n_threads;
+  [[noreturn]] void research_sha();
+  std::size_t time();
+  std::mutex Mutex;
 
  public:
   BrutFSha(const unsigned int n_t) : n_threads(n_t) {}
+  void work_threads();
+  static json data;
 
-  void work_threads(){
-    std::vector<std::thread> vec_thr;
-    for (unsigned int i = 0; i < n_threads; i++){
-      vec_thr.push_back(std::thread(reaserch_sha));
-    }
-
-    //Прекращение работы по ctrl+c
+  static void sign_exit(int){
+    std::cout << "Exit from program" <<std::endl;
+    std::ofstream file("info_array.txt");
+    file << data;
+    exit(0);
   }
-
-  void research_sha(){
-    thread_local std::mt19937 g(std::random_device{}());
-    while(true){
-      std::string rand_str = std::to_string(g());
-      const std::string hash
-          = picosha2::hash256_hex_string(rand_str.begin(), rand_str.end());
-    }
-  }
-
-
 };
-
 
 #endif // INCLUDE_HEADER_HPP_

@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.12)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 option(BUILD_TESTS "Build tests" ON)
 option(BUILD_DOCS "Build documentation" OFF)
 option(BUILD_COVERAGE "Build code coverage" OFF)
@@ -28,6 +30,12 @@ string(APPEND CMAKE_CXX_FLAGS " -Wshadow -Wnon-virtual-dtor")
 hunter_add_package(GTest)
 find_package(GTest CONFIG REQUIRED)
 
+hunter_add_package(nlohmann_json)
+find_package(nlohmann_json CONFIG REQUIRED)
+
+hunter_add_package(Boost COMPONENTS filesystem log program_options system thread)
+find_package(Boost CONFIG REQUIRED filesystem log log_setup program_options system thread)
+
 find_package(Threads)
 
 add_subdirectory("third-party/")
@@ -44,11 +52,18 @@ target_include_directories(sha256 PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-target_link_libraries(demo PUBLIC sha256)
+target_link_libraries(demo PUBLIC
+        sha256)
 
 target_link_libraries(sha256
         PUBLIC Threads::Threads
-        picosha)
+        picosha
+        nlohmann_json::nlohmann_json
+        Boost::log
+        Boost::log_setup
+        Boost::thread
+        Boost::filesystem
+        Boost::system)
 
 add_executable(tests
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/test.cpp
