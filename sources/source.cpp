@@ -1,3 +1,3 @@
-// Copyright 2020 Your Name <your_email>
+// Copyright [2020] <Alyona Dorodnyaya>
 
 #include <header.hpp>
